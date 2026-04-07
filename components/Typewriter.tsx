@@ -3,10 +3,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const PHRASES = ["Seaway Think", "by William van Wingerden"];
-const TYPE_SPEED = 90;
-const DELETE_SPEED = 50;
-const PAUSE_AFTER_TYPE = 2400;
-const PAUSE_AFTER_DELETE = 600;
+
+/* ── Timing (ms) ── */
+const TYPE_BASE = 130; // base keystroke interval — unhurried
+const TYPE_VARIANCE = 60; // ±random jitter so rhythm feels human
+const DELETE_SPEED = 45; // deletion stays quick but not frantic
+const PAUSE_AFTER_TYPE = 3200; // dwell on the completed phrase
+const PAUSE_AFTER_DELETE = 900; // breathe before next phrase
+const INITIAL_DELAY = 500; // beat before first keystroke
 
 export default function Typewriter() {
   const [displayText, setDisplayText] = useState("");
@@ -14,17 +18,19 @@ export default function Typewriter() {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  /** Small random offset so typing doesn't feel metronomic */
+  const jitter = () =>
+    TYPE_BASE + (Math.random() * TYPE_VARIANCE * 2 - TYPE_VARIANCE);
+
   const tick = useCallback(() => {
     const currentPhrase = PHRASES[phraseIndex];
 
     if (!isDeleting) {
-      // Typing forward
       if (displayText.length < currentPhrase.length) {
         const nextChar = currentPhrase[displayText.length];
         setDisplayText((prev) => prev + nextChar);
-        timeoutRef.current = setTimeout(tick, TYPE_SPEED);
+        timeoutRef.current = setTimeout(tick, jitter());
       } else {
-        // Finished typing — pause then start deleting
         timeoutRef.current = setTimeout(() => {
           setIsDeleting(true);
           tick();
@@ -32,12 +38,10 @@ export default function Typewriter() {
         return;
       }
     } else {
-      // Deleting backward
       if (displayText.length > 0) {
         setDisplayText((prev) => prev.slice(0, -1));
         timeoutRef.current = setTimeout(tick, DELETE_SPEED);
       } else {
-        // Finished deleting — pause then advance to next phrase
         setIsDeleting(false);
         setPhraseIndex((prev) => (prev + 1) % PHRASES.length);
         timeoutRef.current = setTimeout(tick, PAUSE_AFTER_DELETE);
@@ -47,7 +51,7 @@ export default function Typewriter() {
   }, [displayText, isDeleting, phraseIndex]);
 
   useEffect(() => {
-    timeoutRef.current = setTimeout(tick, TYPE_SPEED);
+    timeoutRef.current = setTimeout(tick, INITIAL_DELAY);
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
@@ -71,14 +75,15 @@ export default function Typewriter() {
       <span
         style={{
           display: "inline-block",
-          width: "2px",
-          height: "0.85em",
+          width: "1.5px",
+          height: "0.8em",
           backgroundColor: "var(--color-fg)",
-          marginLeft: "3px",
-          animation: "cursorBlink 1s step-end infinite",
+          marginLeft: "4px",
+          animation: "cursorBlink 1.2s ease-in-out infinite",
           verticalAlign: "baseline",
           position: "relative",
           top: "0.05em",
+          opacity: 0.7,
         }}
         aria-hidden="true"
       />

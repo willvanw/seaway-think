@@ -224,7 +224,7 @@ button {
 /* ---- Typewriter Cursor ---- */
 
 @keyframes cursorBlink {
-  0%, 100% { opacity: 1; }
+  0%, 100% { opacity: 0.7; }
   50% { opacity: 0; }
 }
 
