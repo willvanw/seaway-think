@@ -1,30 +1,52 @@
 "use client";
 
 interface MenuButtonProps {
+  isOpen: boolean;
   onClick: () => void;
 }
 
-export default function MenuButton({ onClick }: MenuButtonProps) {
+export default function MenuButton({ isOpen, onClick }: MenuButtonProps) {
+  const lineStyle: React.CSSProperties = {
+    display: "block",
+    width: "20px",
+    height: "1.5px",
+    backgroundColor: "var(--color-fg)",
+    transition: "transform 400ms cubic-bezier(0.25,0.1,0.25,1), opacity 300ms ease",
+    transformOrigin: "center",
+  };
+
   return (
     <button
       onClick={onClick}
-      aria-label="Open menu"
+      aria-label={isOpen ? "Close menu" : "Open menu"}
       style={{
         position: "fixed",
         top: "var(--space-xl)",
         right: "var(--space-xl)",
-        zIndex: 80,
-        fontFamily: "var(--font-sans)",
-        fontSize: "var(--text-sm)",
-        fontWeight: 400,
-        color: "var(--color-fg-secondary)",
-        letterSpacing: "0.05em",
-        textTransform: "uppercase",
-        padding: "var(--space-sm) 0",
+        zIndex: 110,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "5px",
+        width: "44px",
+        height: "44px",
+        padding: 0,
         transition: "opacity var(--transition-fast)",
       }}
     >
-      Menu
+      <span style={{
+        ...lineStyle,
+        transform: isOpen ? "rotate(45deg) translate(0, 4.5px)" : "none",
+      }} />
+      <span style={{
+        ...lineStyle,
+        opacity: isOpen ? 0 : 1,
+      }} />
+      <span style={{
+        ...lineStyle,
+        transform: isOpen ? "rotate(-45deg) translate(0, -4.5px)" : "none",
+      }} />
     </button>
   );
 }

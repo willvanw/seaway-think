@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { EB_Garamond, DM_Sans } from "next/font/google";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const ebGaramond = EB_Garamond({
@@ -47,7 +48,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${ebGaramond.variable} ${dmSans.variable}`}>
-      <body>{children}</body>
+      <body>
+        <div className="page-transition">
+          {children}
+          <Footer />
+        </div>
+      </body>
     </html>
   );
 }

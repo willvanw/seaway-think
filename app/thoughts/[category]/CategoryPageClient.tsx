@@ -8,6 +8,7 @@ import CategoryNav from "@/components/CategoryNav";
 import SideNav from "@/components/SideNav";
 import MenuButton from "@/components/MenuButton";
 import Menu from "@/components/Menu";
+import ReadingProgress from "@/components/ReadingProgress";
 import { CATEGORIES } from "@/lib/categories";
 
 interface CategoryPageClientProps {
@@ -38,7 +39,8 @@ export default function CategoryPageClient({
 
   return (
     <div>
-      <MenuButton onClick={() => setMenuOpen(true)} />
+      <ReadingProgress />
+      <MenuButton isOpen={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
       <Menu
         categories={CATEGORIES}
         isOpen={menuOpen}
@@ -100,15 +102,19 @@ export default function CategoryPageClient({
             }}
           >
             <span>{articles[activeIndex]?.frontmatter.title}</span>
-            <span
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
               style={{
                 transform: navExpanded ? "rotate(180deg)" : "rotate(0)",
                 transition: "transform var(--transition-fast)",
-                fontSize: "0.6em",
+                flexShrink: 0,
               }}
             >
-              ▼
-            </span>
+              <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </button>
 
           {navExpanded && (
@@ -144,7 +150,10 @@ export default function CategoryPageClient({
                           : "var(--color-fg-tertiary)",
                       fontWeight: index === activeIndex ? 500 : 400,
                       textAlign: "left",
-                      padding: "var(--space-xs) 0",
+                      padding: "var(--space-sm) 0",
+                      minHeight: "44px",
+                      display: "flex",
+                      alignItems: "center",
                     }}
                   >
                     {article.frontmatter.title}

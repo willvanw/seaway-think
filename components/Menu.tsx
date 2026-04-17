@@ -58,7 +58,7 @@ export default function Menu({ categories, isOpen, onClose }: MenuProps) {
           width: "min(380px, 85vw)",
           backgroundColor: "var(--color-bg)",
           borderLeft: "1px solid var(--color-rule-light)",
-          padding: "var(--space-3xl) var(--space-2xl)",
+          padding: "calc(var(--space-3xl) + var(--space-xl)) var(--space-2xl)",
           transform: isOpen ? "translateX(0)" : "translateX(100%)",
           opacity: isOpen ? 1 : 0,
           transition:
@@ -69,23 +69,6 @@ export default function Menu({ categories, isOpen, onClose }: MenuProps) {
           gap: "var(--space-3xl)",
         }}
       >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          aria-label="Close menu"
-          style={{
-            alignSelf: "flex-end",
-            fontFamily: "var(--font-sans)",
-            fontSize: "var(--text-sm)",
-            color: "var(--color-fg-secondary)",
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-            transition: "opacity var(--transition-fast)",
-          }}
-        >
-          Close
-        </button>
-
         {/* Category heading */}
         <div>
           <p

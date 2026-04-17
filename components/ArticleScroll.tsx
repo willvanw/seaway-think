@@ -71,10 +71,10 @@ export default function ArticleScroll({
           {index > 0 && (
             <div
               style={{
-                width: "40px",
+                width: "32px",
                 height: "1px",
                 backgroundColor: "var(--color-rule)",
-                marginBottom: "var(--space-4xl)",
+                marginBottom: "var(--space-3xl)",
               }}
             />
           )}
